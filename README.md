@@ -1,20 +1,31 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+To create cinematic hacker-style interfaces, as seen in films like The Matrix or Mr. Robot.
 
-# Run and deploy your AI Studio app
+• Satellite map with infinite zoom/enhance: Simulates zooming into locations from a satellite view.
 
-This contains everything you need to run your app locally.
+ • 3D spinning globe: Displays data points or global connections for a high-tech effect.
 
-View your app in AI Studio: https://ai.studio/apps/fe635762-689a-4ff8-af03-47970c4cde15
+• Rapid scrolling source code or command-line text: Mimics fast-paced coding or terminal output.
 
-## Run Locally
+• Progress bars: Animated bars labeled “Downloading” or “Decrypting” for dramatic effect.
 
-**Prerequisites:**  Node.js
+• Facial recognition match animation: Shows a face scan with a “MATCH FOUND” popup.
 
+• Grid of security camera feeds: Displays fake surveillance footage.
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+• Heatmaps of activity/movement: Visualizes data patterns or activity hot spots.
+
+• Real-time signal/wire trace: Tracks signals across a map with animated lines.
+
+• Database query screens: Shows photos and personal data, resembling a police database.
+
+• Wireframe blueprints rotating in 3D: Presents rotating technical schematics.
+
+• Pulsing radar sweeps: Simulates radar tracking with sweeping animations.
+
+• Dynamic network graphs: Features nodes connecting and disconnecting dynamically.
+
+• DNA sequence or biometric scan overlays: Displays futuristic biometric visuals.
+
+• “Access granted/denied” popups: Adds dramatic authorization messages.
+
+• Red “ALERT” or flashing warnings: Creates urgency with bold warning visuals.
