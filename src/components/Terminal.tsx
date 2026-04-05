@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 
 const LOG_MESSAGES = [
-  "INITIALIZING NEURAL_LINK KERNEL...",
+  "INITIALIZING XENORISH KERNEL...",
   "LOADING CORE MODULES: [OK]",
   "ESTABLISHING SECURE TUNNEL: [OK]",
   "BYPASSING FIREWALL: ATTEMPT 1...",

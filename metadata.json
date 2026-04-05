@@ -1,6 +1,6 @@
 {
-  "name": "NEURAL_LINK // OS",
-  "description": "Cinematic hacker-style interface featuring satellite tracking, global network visualization, and biometric security systems.",
+  "name": "XENORISH // OS",
+  "description": "Cinematic hacker-style interface featuring satellite tracking, global network visualization, and biometric security systems. Created by Rishabh.",
   "requestFramePermissions": [
     "camera"
   ]

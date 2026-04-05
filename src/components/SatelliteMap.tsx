@@ -2,6 +2,63 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Search, Target, Crosshair, ShieldAlert } from 'lucide-react';
 
+const SignalLine = () => {
+  const [coords, setCoords] = useState({ x1: 0, y1: 0, x2: 0, y2: 0 });
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const trigger = () => {
+      setCoords({
+        x1: Math.random() * 100,
+        y1: Math.random() * 100,
+        x2: Math.random() * 100,
+        y2: Math.random() * 100,
+      });
+      setIsVisible(true);
+      setTimeout(() => setIsVisible(false), 2000);
+    };
+
+    const interval = setInterval(() => {
+      if (Math.random() > 0.7) trigger();
+    }, 3000);
+
+    trigger();
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <AnimatePresence>
+      {isVisible && (
+        <motion.g
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+        >
+          <motion.line
+            x1={`${coords.x1}%`}
+            y1={`${coords.y1}%`}
+            x2={`${coords.x2}%`}
+            y2={`${coords.y2}%`}
+            stroke="#00f2ff"
+            strokeWidth="1"
+            strokeDasharray="4 4"
+            initial={{ pathLength: 0 }}
+            animate={{ pathLength: 1 }}
+            transition={{ duration: 1.5, ease: "easeInOut" }}
+          />
+          <motion.circle
+            r="2"
+            fill="#00f2ff"
+            initial={{ cx: `${coords.x1}%`, cy: `${coords.y1}%`, opacity: 0 }}
+            animate={{ cx: `${coords.x2}%`, cy: `${coords.y2}%`, opacity: [0, 1, 0] }}
+            transition={{ duration: 1.5, ease: "easeInOut" }}
+          />
+        </motion.g>
+      )}
+    </AnimatePresence>
+  );
+};
+
 export const SatelliteMap = () => {
   const [zoom, setZoom] = useState(1);
   const [isEnhancing, setIsEnhancing] = useState(false);
@@ -20,12 +77,19 @@ export const SatelliteMap = () => {
   }, [isEnhancing]);
 
   const handleEnhance = () => {
+    // Pick a random target location on click
+    const newTarget = {
+      x: 10 + Math.random() * 80,
+      y: 10 + Math.random() * 80,
+    };
+    setTargetPos(newTarget);
     setIsEnhancing(true);
-    setZoom(4);
+    setZoom(10); // Significant zoom
+    
     setTimeout(() => {
       setIsEnhancing(false);
       setZoom(1);
-    }, 3000);
+    }, 4000); // Slightly longer for dramatic effect
   };
 
   return (
@@ -44,23 +108,58 @@ export const SatelliteMap = () => {
         className="absolute inset-0 flex items-center justify-center"
         animate={{ 
           scale: zoom,
-          x: isEnhancing ? `${(50 - targetPos.x) * 2}%` : 0,
-          y: isEnhancing ? `${(50 - targetPos.y) * 2}%` : 0,
+          x: isEnhancing ? `${(50 - targetPos.x) * 5}%` : 0,
+          y: isEnhancing ? `${(50 - targetPos.y) * 5}%` : 0,
+          filter: isEnhancing ? ['blur(4px)', 'blur(1px)', 'blur(0px)'] : 'blur(0px)'
         }}
-        transition={{ duration: 2.5, ease: "easeInOut" }}
+        transition={{ 
+          duration: isEnhancing ? 3 : 1, 
+          ease: "easeInOut" 
+        }}
       >
-        <div className="w-[200%] h-[200%] border border-hacker-green/10 flex items-center justify-center">
-          <div className="grid grid-cols-8 grid-rows-8 w-full h-full opacity-30">
-            {Array.from({ length: 64 }).map((_, i) => (
-              <div key={i} className="border-[0.5px] border-hacker-green/10 relative">
-                <span className="absolute top-1 left-1 text-[6px] text-hacker-green/20">
-                  {Math.floor(i / 8)}:{i % 8}
-                </span>
+        <div className="w-[300%] h-[300%] border border-hacker-green/10 flex items-center justify-center relative">
+          {/* Noise overlay during reconstruction */}
+          {isEnhancing && (
+            <motion.div 
+              initial={{ opacity: 0.5 }}
+              animate={{ opacity: 0 }}
+              transition={{ duration: 3 }}
+              className="absolute inset-0 z-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] pointer-events-none"
+            />
+          )}
+          
+          {/* Detailed Grid for high zoom */}
+          <div className="grid grid-cols-16 grid-rows-16 w-full h-full opacity-30">
+            {Array.from({ length: 256 }).map((_, i) => (
+              <div key={i} className="border-[0.2px] border-hacker-green/5 relative">
+                {zoom > 5 && (
+                  <span className="absolute top-0.5 left-0.5 text-[2px] text-hacker-green/10">
+                    {Math.floor(i / 16)}:{i % 16}
+                  </span>
+                )}
               </div>
             ))}
           </div>
+          
+          {/* Simulated "Target" at high zoom */}
+          {isEnhancing && (
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: [0, 0.5, 0.2, 0.8, 0.4] }}
+              className="absolute w-4 h-4 border border-hacker-blue/40 bg-hacker-blue/10"
+            />
+          )}
         </div>
       </motion.div>
+
+      {/* Signal Tracing Lines */}
+      <svg className="absolute inset-0 z-10 pointer-events-none w-full h-full">
+        <AnimatePresence>
+          {Array.from({ length: 3 }).map((_, i) => (
+            <SignalLine key={i} />
+          ))}
+        </AnimatePresence>
+      </svg>
 
       {/* Target Reticle */}
       <motion.div 

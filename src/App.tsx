@@ -1,21 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { AlertTriangle, ShieldAlert, Terminal as TerminalIcon, Cpu, Activity, Database, Lock, Unlock } from 'lucide-react';
-import { Terminal } from './components/Terminal';
+import { AlertTriangle, ShieldAlert, Terminal as TerminalIcon, Cpu, Activity, Database, Lock, Unlock, Dna } from 'lucide-react';
+import { HackingEnvironment } from './components/HackingEnvironment';
 import { Globe } from './components/Globe';
 import { SatelliteMap } from './components/SatelliteMap';
 import { SecurityGrid } from './components/SecurityGrid';
 import { NetworkGraph } from './components/NetworkGraph';
 import { Radar } from './components/Radar';
+import { BiometricOverlay } from './components/BiometricOverlay';
 
 export default function App() {
   const [isAlert, setIsAlert] = useState(false);
   const [accessGranted, setAccessGranted] = useState(false);
+  const [isBiometricOpen, setIsBiometricOpen] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
     return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIsBiometricOpen(false);
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
   const triggerAlert = () => {
@@ -44,7 +54,7 @@ export default function App() {
         <div className="flex items-center gap-6">
           <div className="flex items-center gap-2">
             <Cpu className="w-5 h-5 text-hacker-green" />
-            <h1 className="text-lg font-bold tracking-[0.2em] glow-text">NEURAL_LINK // OS v4.0.2</h1>
+            <h1 className="text-lg font-bold tracking-[0.2em] glow-text">XENORISH // OS v4.0.2</h1>
           </div>
           <div className="h-4 w-[1px] bg-hacker-green/20" />
           <div className="flex gap-4 text-[10px] font-bold text-hacker-green/60">
@@ -71,10 +81,10 @@ export default function App() {
       {/* Main Dashboard Layout */}
       <main className="relative z-10 p-4 h-[calc(100vh-3.5rem)] grid grid-cols-12 grid-rows-6 gap-4">
         
-        {/* Left Column: Terminal & Network */}
+        {/* Left Column: Hacking Environment & Network */}
         <div className="col-span-3 row-span-6 flex flex-col gap-4">
           <div className="flex-1">
-            <Terminal />
+            <HackingEnvironment />
           </div>
           <div className="h-1/3">
             <NetworkGraph />
@@ -115,9 +125,12 @@ export default function App() {
                 <AlertTriangle className="w-4 h-4" />
                 TRIGGER_ALERT
               </button>
-              <button className="bg-hacker-blue/10 hover:bg-hacker-blue/20 border border-hacker-blue/40 p-2 text-[10px] font-bold text-hacker-blue flex flex-col items-center gap-1 transition-colors">
-                <ShieldAlert className="w-4 h-4" />
-                ENCRYPT_CORE
+              <button 
+                onClick={() => setIsBiometricOpen(true)}
+                className="bg-hacker-blue/10 hover:bg-hacker-blue/20 border border-hacker-blue/40 p-2 text-[10px] font-bold text-hacker-blue flex flex-col items-center gap-1 transition-colors"
+              >
+                <Dna className="w-4 h-4" />
+                BIOMETRIC_SCAN
               </button>
             </div>
 
@@ -137,6 +150,9 @@ export default function App() {
           </div>
         </div>
       </main>
+
+      {/* Biometric Overlay */}
+      <BiometricOverlay isOpen={isBiometricOpen} onClose={() => setIsBiometricOpen(false)} />
 
       {/* Alert Overlay */}
       <AnimatePresence>
@@ -172,7 +188,8 @@ export default function App() {
           <span>UPTIME: 142:12:04</span>
         </div>
         <div className="flex gap-4">
-          <span>USER: ROOT@NEURAL_LINK</span>
+          <span>USER: ROOT@XENORISH</span>
+          <span>CREATOR: RISHABH</span>
           <span>REGION: ASIA_PACIFIC</span>
         </div>
       </footer>
